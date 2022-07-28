@@ -31,6 +31,7 @@ At this moment, masks `random_mask` and `triangle_mask` can be used to generate 
 <p align="middle">
     <img src="images/random.jpg" width="200" />
     <img src="images/triangle.jpg" width="200" />
+    <img src="images/blob_blur.jpg", width="200" />
 </p>
 
 (The images have been converted to `.jpg` for the porpuse of visualizing them here)
