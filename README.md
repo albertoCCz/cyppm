@@ -27,7 +27,7 @@ $ python
 ```
 which generates an `output.ppm` image file that can be visualized [here](https://www.cs.rhodes.edu/welshc/COMP141_F16/ppmReader.html).
 
-At this moment, masks `random_mask` and `triangle_mask` can be used to generate images. The result of using each one is the next:
+At this moment, masks `random_mask`, `triangle_mask` and `blob_blur` can be used to generate images. The result of using each one is the next:
 <p align="middle">
     <img src="images/random.jpg" width="200" />
     <img src="images/triangle.jpg" width="200" />
