@@ -32,6 +32,7 @@ At this moment, masks `random_mask`, `triangle_mask` and `blob_blur` can be used
     <img src="images/random.jpg" width="200" />
     <img src="images/triangle.jpg" width="200" />
     <img src="images/blob_blur.jpg", width="200" />
+    <img src="images/blob_blur_gif.gif", width="200" />
 </p>
 
 (The images have been converted to `.jpg` for the porpuse of visualizing them here)
