@@ -34,14 +34,15 @@ cdef (unsigned char) blob_mask(size_t row, size_t col, size_t c):
     else:
         return MAX_COLOR_VALUE
 
-cdef (unsigned char) blob_blur_mask(size_t row, size_t col, size_t c):
-    cdef double BLOB_RADIUS_IN  = WIDTH / 4 if WIDTH < HEIGHT else HEIGHT / 4
-    cdef double BLOB_RADIUS_OUT = 1.5 * (WIDTH / 4) if WIDTH < HEIGHT else 1.5 * (HEIGHT / 4)
+cdef (unsigned char) blob_blur_mask(size_t row, size_t col, double factor):
+    cdef double blob_radius_in  = min(WIDTH, HEIGHT) / 8
+    cdef double blob_radius_out = blob_radius_in * 1.5 * factor
     cdef double dist_to_center  = dist_2d(col, row, WIDTH//2, HEIGHT//2)
-    if dist_to_center < BLOB_RADIUS_IN:
+    if dist_to_center < blob_radius_in:
         return 0
     else:
-        return int(MAX_COLOR_VALUE * min(1, abs((dist_to_center - BLOB_RADIUS_IN) / (BLOB_RADIUS_OUT - BLOB_RADIUS_IN))))
+        return int(MAX_COLOR_VALUE * min(1, abs((dist_to_center - blob_radius_in) / (blob_radius_out - blob_radius_in))))
+
 
 cdef (unsigned char) triangle_mask(size_t row, size_t col, size_t c):
     if col >= row:
@@ -54,7 +55,7 @@ cdef (unsigned char) random_mask(size_t row, size_t col, size_t c):
 
 # Image generation
 # ================
-cdef (unsigned char[:,:,:]) gen_image():
+cdef (unsigned char[:,:,:]) gen_image(size_t iter):
     cdef size_t row, col, c
 
     cyarr = cvarray(shape=(HEIGHT, WIDTH, N_CHANNELS), itemsize=sizeof(unsigned char), format="B")
@@ -63,7 +64,7 @@ cdef (unsigned char[:,:,:]) gen_image():
     for row in range(HEIGHT):
         for col in range(WIDTH):
             for c in range(N_CHANNELS):
-                image[row, col, c] = blob_blur_mask(row, col, c)
+                image[row, col, c] = blob_blur_mask(row, col, iter*0.4 + 1)
 
     return image
 
@@ -85,13 +86,9 @@ cdef dump_image(unsigned char[:,:,:] image, FILE *f):
 
             if col == (WIDTH - 1): fputs("\n", f)
 
-<<<<<<< HEAD
+# Save image buffer to specific format
+# ====================================
 cdef to_ppm(unsigned char[:,:,:] image, char *file_name):
-=======
-# Run the thing
-# =============
-cpdef main():
->>>>>>> d59c97b85f8f42d868d9c5c49e323406a26b4306
     # open the file
     cdef FILE *f = fopen(file_name, "w")
 
@@ -111,10 +108,22 @@ cdef to_jpeg(unsigned char[:,:,:] image, file_name):
     # dump image to file
     image_jpeg.save(file_name)
 
-cpdef main():
-    # gen image
-    cdef unsigned char[:,:,:] image = gen_image()
 
-    # save to file
-    file_name = "output.jpeg"
-    to_jpeg(image, file_name)
+cpdef main():
+    cdef size_t i
+    cdef unsigned char[:,:,:] image
+    images = []
+
+    for i in range(10):
+        # gen image
+        image = gen_image(i)
+
+        # save to file
+        file_name = f"./gifimages/output_{i}.jpeg"
+        to_jpeg(image, file_name)
+        
+    for i in range(10):
+        im = Image.open(f"./gifimages/output_{i}.jpeg")
+        images.append(im)
+    
+    images[0].save("gifimages/output.gif", save_all=True, append_images=images, loop=0)
