@@ -18,14 +18,14 @@ rm *.c
 ```
 
 ## Usage
-You can generate a `.ppm` image by calling the `main` function:
+You can generate a `.gif` that uses the mask `blob_blur` by calling the `main` function in _./examples/blob_blur_gif.pyx_:
 ```cmd
 $ python
 ...
->>> from ppm_gen import main
+>>> from blob_blur_gif import main
 >>> main()
 ```
-which generates an `output.ppm` image file that can be visualized [here](https://www.cs.rhodes.edu/welshc/COMP141_F16/ppmReader.html).
+which generates an `output.gif` file.
 
 At this moment, masks `random_mask`, `triangle_mask` and `blob_blur` can be used to generate images. The result of using each one is the next:
 <p align="middle">
